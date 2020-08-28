@@ -1,17 +1,15 @@
 'use strict';
-module.exports = function(app) {
+module.exports = function(app,authRoute) {
   const blogEntry = require('../controllers/blogEntryController');
-  app.route('/entries')
-    .get(blogEntry.listAll)
-    .post(blogEntry.create);
+  
+  authRoute.post('/entries', blogEntry.create);
+  authRoute.put('/entries/:entryId', blogEntry.update);
+  authRoute.delete('/entries/:entryId', blogEntry.delete);
 
-    app.route('/entries')
-    .post(blogEntry.create);
+  app.route('/entries')
+    .get(blogEntry.listAll);
 
   app.route('/entries/:entryId')
     .get(blogEntry.read)
 
-    app.route('/api/entries/:entryId')
-    .put(blogEntry.update)
-    .delete(blogEntry.delete);
 };

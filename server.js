@@ -47,16 +47,11 @@ authenticatedRoute.use(function(req, res, next) {
 
 });
 
-//Define your routes that need authentication check
-authenticatedRoute.get("/test", function(req, res, next) {
-	res.send(`Hi ${res.locals.user.username}, your API call is authenticated!`);
-});
-
 const blogRoutes = require('./api/routes/blogRoutes'); 
-blogRoutes(app);
+blogRoutes(app,authenticatedRoute);
 
 const homeRoutes = require('./api/routes/homeRoutes');
-homeRoutes(app);
+homeRoutes(app,authenticatedRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port);
