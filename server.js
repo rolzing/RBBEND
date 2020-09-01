@@ -56,31 +56,36 @@ authenticatedRoute.use(function (req, res, next) {
   }
 });
 
-app.post('/sendEmail', (req, res) => {
-	const {to,subject,text} = req.body;
+app.post("/sendEmail", (req, res) => {
+  const { to, subject, text, name } = req.body;
 
-	if(!to || !subject || !text){
-		return res.status(400).json({
-			status: '400 Bad Request',
-			message: 'Missing required fields: to or subject or text'
-		  });
-	}
+  if (!to || !subject || !text || !name) {
+    return res.status(400).json({
+      status: "400 Bad Request",
+      message: "Missing required fields: to or subject or text",
+    });
+  }
 
-	const mailData = {
-		from: 'rolzing.sp4m@gmail.com',
-		to: to,
-		subject: subject,
-		text: text,
-		html: '<b>Hey there! </b> <br> This is our first message sent with Nodemailer<br/>'
-	}
+  const mailData = {
+    from: "rolzing.sp4m@gmail.com",
+    to: "ric.lohern@gmail.com",
+    subject: subject,
+    text: text,
+    name: name,
+    html: `<b>Hey Richard! </b> <br> 
+    <p>${name}:
+    ${text}</p> </br>
+    <p>${to}</p>`,
+  };
 
-	transporter.sendMail(mailData, function (err, info) {
-		if(err)
-		  return console.log(err)
-		else
-		  res.status(200).send({message: 'mail send', message_id: info.messageId})
-	 });
-})
+  transporter.sendMail(mailData, function (err, info) {
+    if (err) return console.log(err);
+    else
+      res
+        .status(200)
+        .send({status: "200", message: "mail send", message_id: info.messageId });
+  });
+});
 
 const blogRoutes = require("./api/routes/blogRoutes");
 blogRoutes(app, authenticatedRoute);
